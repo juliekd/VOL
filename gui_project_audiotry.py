@@ -113,6 +113,8 @@ class Application(Frame):
         #set Start time
         global start
         start = time.time()
+
+        #a weird hacky thing showing when 1min is reached
         self.line1["text"] = "0"
         self.line1.after(60000, self.increment)
 
@@ -123,7 +125,10 @@ class Application(Frame):
 
     def increment(self):
         global start
-        self.line1["text"]=str(time.time() - start)
+        t = time.time() - start)
+        self.line1["text"]=str(t)
+        global f
+        f.write('CUE: ' + str(t) + '\n')
 
     #Record time button is clicked
     def colour(self, colour):
