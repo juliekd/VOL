@@ -1,5 +1,6 @@
 from sound import Sound
 from pocketsphinx import LiveSpeech
+import time
 
 
 #function for decreasing volume where input is speed
