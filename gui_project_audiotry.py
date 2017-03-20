@@ -1,8 +1,9 @@
 from tkinter import *
 import time
+import os
 import ctypes
 from sound import Sound
-from pocketsphinx import LiveSpeech
+from pocketsphinx import LiveSpeech, get_model_path
 from threading import Thread
 
 global start
@@ -14,7 +15,9 @@ def decrease(inputspeed):
 	#decrease volume at rate according to speed
 	speed = int(inputspeed)
 	count = 0
-	if speed == 1:
+	if speed == 0:
+		Sound.volume_set(10)
+	elif speed == 1:
 		while count <= 15:
 			#1 second reduction for 15 bars
 			Sound.volume_down()
@@ -33,25 +36,28 @@ def decrease(inputspeed):
 			time.sleep(5 / 15)
 			count += 1
 
-def instant_decrease():
-	Sound.volume_set(10)
+def audioCheck(inputspeed):
+	if (inputspeed == "0" or inputspeed == "1" or inputspeed == "3" or inputspeed == "5"):
+		model_path = get_model_path()
+		speech = LiveSpeech(
+            verbose=False,
+            sampling_rate=16000,
+            buffer_size=2048,
+            no_search=False,
+            full_utt=False,
+            hmm=os.path.join(model_path, 'en-us'),
+            lm=os.path.join(model_path, 'en-us.lm.bin'),
+            dic=os.path.join(model_path, 'cmudict-en-us.dict'))
+		for phrase in speech:
+		    print(phrase)
+		    break
+		decrease(inputspeed)
 
 #reset volume 
 def normalize():
 	Sound.volume_set(40)
 
-def audioCheck(option):
-    if (option == "0" or option == "1" or option == "3" or option == "5"):
-        speech = LiveSpeech(lm=False, keyphrase='hey', kws_threshold=1e+20)
-        global f
-        global start
-        f.write(str(start - time.time()))
-        for phrase in speech:
-            print(phrase)
-        if option == "0":
-            instant_decrease()
-        else:
-            decrease(option)
+
 
 class Application(Frame):
     
@@ -59,6 +65,8 @@ class Application(Frame):
         super().__init__(master)
         self.pack()
         self.create_widgets()
+        normalize()
+        #audioCheck(3)
 
     def create_widgets(self):
         #seperator
@@ -74,8 +82,22 @@ class Application(Frame):
         self.openFile = Button(self, text="OK", command=self.fileStart)
         self.openFile.pack()
 
-        #seperator
-        self.line = Label(self, text="----------------USER----------------")
+        #Set Speeed & Start Recording
+        # self.recTitle = Label(self, text="Enter a speed: 0, 1, 3, 5, none")
+        # self.recTitle.pack() 
+        # self.recSpeed = Entry(self)
+        # self.recSpeed.pack()
+        # self.recSpeed.insert(0, "1")
+        # self.startRecording = Button(self, text="Start Recording")
+        # self.startRecording["command"]=lambda : self.audioCheck(self.recSpeed.get())
+        # self.startRecording.pack()
+
+        #input is the speed
+        #on submit: run recording
+
+
+        
+        self.line = Label(self, text="Enter a speed: 0, 1, 3, 5, none")
         self.line.pack()
 
         #Start button initiates the experiment
@@ -86,11 +108,15 @@ class Application(Frame):
         self.start = Button(self, text="START", command=self.start)
         self.start.pack(padx=5, pady= 20)
 
+        #user section
+        self.userline = Label(self, text="----------------USER----------------")
+        self.userline.pack()
+
         #Entry field for word counts
-        self.ent = Entry(self)
-        self.ent.pack()
-        self.submit = Button(self, text="SUBMIT", bg="yellow", command=self.enter)
-        self.submit.pack()
+        # self.ent = Entry(self)
+        # self.ent.pack()
+        # self.submit = Button(self, text="SUBMIT", bg="yellow", command=self.enter)
+        # self.submit.pack()
 
         #Colour buttons
         self.blue = Button(self, text="BLUE", fg="blue", bg="blue", height=5, width=10)
@@ -114,21 +140,26 @@ class Application(Frame):
         global start
         start = time.time()
 
-        #a weird hacky thing showing when 1min is reached
-        self.line1["text"] = "0"
-        self.line1.after(60000, self.increment)
+
+        self.line1.after(90000, self.increment)
+
 
         #audio
-        #option = self.speed.get()
-        #audioThread = Thread(target=audioCheck, args=(option,))
-        #audioThread.start()
+        option = self.speed.get()
+        global f
+        f.write('AUDIO REDUCTION LEVEL: ' + option + '\n')
+        if (option == "none"):
+        	option = "0"
+        else:
+        	audioCheck(option)
+        f.write('SPOKEN CUE: ' + str(time.time() - start - float(option)) + '\n')
 
     def increment(self):
-        global start
-        t = time.time() - start)
-        self.line1["text"]=str(t)
+
         global f
-        f.write('CUE: ' + str(t) + '\n')
+        f.close()
+        ctypes.windll.user32.MessageBoxW(0, "DONE!", "Test over", 1)
+        
 
     #Record time button is clicked
     def colour(self, colour):
@@ -136,6 +167,7 @@ class Application(Frame):
         t = time.time() - start
         global f
         f.write('REACTION:' + str(t) + '\n')
+        normalize()
 
     #Record user counts
     def enter(self):
@@ -156,8 +188,9 @@ class Application(Frame):
     def fileStart(self):
         global f
         f = open(self.file.get(),'w')
-        
+
 #setup the GUI
+
 root = Tk()
 app = Application(master=root)
 root.geometry("400x400")
