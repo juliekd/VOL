@@ -12,3 +12,6 @@ Source: https://github.com/Paradoxis/Windows-Sound-Manager
 #### Pocketsphinx
 run `pip install pocketsphinx`
 Source: https://pypi.python.org/pypi/pocketsphinx
+
+## Using It
+run `python gui_project_audiotry.py`
