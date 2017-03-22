@@ -128,6 +128,9 @@ class Application(Frame):
         self.green = Button(self, text="GREEN", fg="green", bg="green", height=5, width=10)
         self.green["command"]=lambda colour="green": self.colour(colour)
         self.green.pack(padx=10, pady= 20, side="left")
+        self.none = Button(self, text="UNSURE", fg="white", bg="black", height=5, width=10)
+        self.none["command"]=lambda colour="unsure": self.colour(colour)
+        self.none.pack(padx=10, pady= 20, side="left")
 
         #quit
         self.quit = Button(self, text="QUIT", fg="red", bg="black",command=root.destroy)
@@ -139,8 +142,6 @@ class Application(Frame):
         #set Start time
         global start
         start = time.time()
-
-
         self.line1.after(60000, self.increment)
 
 
@@ -166,6 +167,7 @@ class Application(Frame):
         global start
         t = time.time() - start
         global f
+        f.write('COLOUR: ' + colour + '\n')
         f.write('REACTION:' + str(t) + '\n')
         normalize()
 
