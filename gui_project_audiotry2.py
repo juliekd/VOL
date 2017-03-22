@@ -79,7 +79,7 @@ class Application(Frame):
         self.lbl.pack()
         self.file = Entry(self)
         self.file.pack()
-        self.file.insert(0, "test1a.txt") #default file
+        self.file.insert(0, "Test1a.txt") #default file
         self.openFile = Button(self, text="OK", command=self.fileStart)
         self.openFile.pack()
 
@@ -96,10 +96,10 @@ class Application(Frame):
         self.start.pack(padx=5, pady= 20)
 
         #Entry field for word counts
-        self.ent = Entry(self)
-        self.ent.pack()
-        self.submit = Button(self, text="SUBMIT", bg="yellow", command=self.enter)
-        self.submit.pack()
+        #self.ent = Entry(self)
+        #self.ent.pack()
+        #self.submit = Button(self, text="SUBMIT", bg="yellow", command=self.enter)
+        #self.submit.pack()
 
         #Colour buttons
         self.blue = Button(self, text="BLUE", fg="blue", bg="blue", height=5, width=10)
@@ -111,10 +111,13 @@ class Application(Frame):
         self.green = Button(self, text="GREEN", fg="green", bg="green", height=5, width=10)
         self.green["command"]=lambda colour="green": self.colour(colour)
         self.green.pack(padx=10, pady= 20, side="left")
+        self.none = Button(self, text="UNSURE", fg="white", bg="black", height=5, width=10)
+        self.none["command"]=lambda colour="unsure": self.colour(colour)
+        self.none.pack(padx=10, pady= 20, side="left")
 
         #quit
-        self.quit = Button(self, text="QUIT", fg="red", bg="black",command=root.destroy)
-        self.quit.pack(padx=20, pady= 20)
+        #self.quit = Button(self, text="QUIT", fg="red", bg="black",command=root.destroy)
+        #self.quit.pack(padx=20, pady= 20)
 
     #Setup for experiment start
     def start(self):
@@ -131,9 +134,12 @@ class Application(Frame):
         f.write('AUDIO REDUCTION LEVEL: ' + option + '\n')
         #audioThread = Thread(target=audioCheck, args=(option,))
         #audioThread.start()
-        audioCheck(option)
-        f.write('AUDIO CUE: ' + str(time.time() - start - float(option)) + '\n')
-        normalize()
+        if (option == "none"):
+            f.write('AUDIO CUE: 30s \n')
+        else:
+            audioCheck(option)
+            f.write('AUDIO CUE: ' + str(time.time() - start - float(option)) + '\n')
+            normalize()
         
         #hacky solution for showing the 1min mark
     def increment(self):
@@ -150,6 +156,7 @@ class Application(Frame):
         global start
         t = time.time() - start
         global f
+        f.write('COLOUR: ' + colour + '\n')
         f.write('REACTION:' + str(t) + '\n')
 
     #Record user counts
