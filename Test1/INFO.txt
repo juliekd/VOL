@@ -1,0 +1,12 @@
+N -40s g
+0 - b
+1 - r
+3 - b (delay)
+3 - r
+N - 30s r
+1 - 15 r
+0 = b
+1 - g
+3 - r
+N -30s r
+0 - g --> delay

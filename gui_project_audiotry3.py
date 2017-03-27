@@ -41,27 +41,6 @@ def instant_decrease():
 def normalize():
 	Sound.volume_set(40)
 
-def audioCheck(option):
-    if (option == "0" or option == "1" or option == "3" or option == "5"):
-        model_path = get_model_path()
-        speech = LiveSpeech(
-                verbose=False,
-                sampling_rate=16000,
-                buffer_size=2048,
-                no_search=False,
-                full_utt=False,
-                hmm=os.path.join(model_path, 'en-us'),
-                lm=os.path.join(model_path, 'en-us.lm.bin'),
-                dic=os.path.join(model_path, 'cmudict-en-us.dict'))
-        #speech = LiveSpeech(lm=False, keyphrase='hey', kws_threshold=1e+20)
-        for phrase in speech:
-            print(phrase)
-            break
-        if option == "0":
-            instant_decrease()
-        else:
-            decrease(option)
-
 class Application(Frame):
     
     def __init__(self, master=None):
@@ -94,6 +73,8 @@ class Application(Frame):
         
         self.start = Button(self, text="START", command=self.start)
         self.start.pack(padx=5, pady= 20)
+        self.cueButton = Button(self, text="CUE", command=self.cue)
+        self.cueButton.pack(padx=5, pady= 20)
 
         #Entry field for word counts
         #self.ent = Entry(self)
@@ -132,14 +113,15 @@ class Application(Frame):
         #audio
         option = self.speed.get()
         f.write('AUDIO REDUCTION LEVEL: ' + option + '\n')
-        #audioThread = Thread(target=audioCheck, args=(option,))
-        #audioThread.start()
-        if (option == "none"):
-            f.write('AUDIO CUE: 30s \n')
-        else:
-            audioCheck(option)
-            f.write('AUDIO CUE: ' + str(time.time() - start - float(option)) + '\n')
-            #normalize()
+        
+
+    def cue(self):
+        option = self.speed.get()
+        f.write('AUDIO CUE: ' + str(time.time() - start) + '\n')
+        if (option == "0"):
+            instant_decrease()
+        elif (option != "none"):
+            decrease(option)
         
         #hacky solution for showing the 1min mark
     def increment(self):

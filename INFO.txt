@@ -1,0 +1,34 @@
+N - 10s g
+0 - 8s r
+1 - 10s g
+3 - 8s b
+3 - 9s r
+N - 10s b wrong
+0 - 5s b
+1 - 11s g
+1 - 8 r
+3 - 5s r
+N - 11s b
+0 - 9s b - wrong
+
+N - 3s b - wrong
+0 - 7s b
+1 - 3s r
+3 - 6s b (delay)
+3 - 3s r
+N - 6s r
+1 - 7s r
+0 - 9s unsure - wrong (b)
+1 - 9s b - w (g)
+3 - 5s r
+N - 7s r
+0 - 6s g (delay)
+
+A summary of your progress, any initial findings, 
+	and the next steps you need to take before submitting the 
+
+After developing our software and interface, we have started running studies in participants.
+Initial findings show that using audio reduction increases the accuracy of hearing when compared to the baseline, 
+and are  starting to show a trend towards immediate audio reduction. Participants are finding audio reduction unintrusive,
+but only show positive interest in certain use cases.  
+Our next steps are to complete further user studies and analyze the larger resulting data set. 
