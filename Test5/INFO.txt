@@ -1,0 +1,12 @@
+0 - g (I accidentally touched the mouse when colour being clicked, so they were accurate)
+1 - r
+3 - g
+N - r (didn't hear)
+N - b (didn't hear)
+0 - b
+1 - r
+3 - g (didn't hear)
+3 - r
+N - b (didn't hear)
+0 - g
+1 - b
