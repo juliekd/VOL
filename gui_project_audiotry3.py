@@ -58,7 +58,7 @@ class Application(Frame):
         self.lbl.pack()
         self.file = Entry(self)
         self.file.pack()
-        self.file.insert(0, "Test3/Test3a.txt") #default file
+        self.file.insert(0, "Test4/Test4a.txt") #default file
         self.openFile = Button(self, text="OK", command=self.fileStart)
         self.openFile.pack()
 
